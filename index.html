@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Agency Loader</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
+
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #13152C;
+  font-family: 'Baloo 2', cursive;
+}
+
+/* ===== IFRAME ===== */
+iframe {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: none;
+}
+
+/* ===== LOADER ===== */
+#loader {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at top, #1c1f44, #13152C 65%);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 1s ease;
+}
+
+/* ===== PARTICLES ===== */
+#particles {
+  position: absolute;
+  inset: 0;
+}
+
+/* ===== LOADING TEXT ===== */
+#loading-text {
+  font-size: 42px;
+  color: #E8ECFF;
+  letter-spacing: 4px;
+  margin-bottom: 26px;
+  text-shadow: 0 0 18px rgba(130,133,198,0.9);
+  z-index: 2;
+}
+
+/* ===== SPINNER ===== */
+.spinner {
+  width: 72px;
+  height: 72px;
+  border: 4px solid rgba(137,148,231,0.25);
+  border-top: 4px solid #6E78F7;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  box-shadow: 0 0 25px rgba(110,120,247,0.7);
+  z-index: 2;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOADING SCREEN -->
+<div id="loader">
+  <canvas id="particles"></canvas>
+  <div id="loading-text">THE AGENCY</div>
+  <div class="spinner"></div>
+</div>
+
+<!-- FULLSCREEN EMBED -->
+<iframe
+  src="https://gas.education/math/hvtrs8%2F-dksaopd%2Ccmm-lmgkn"
+  allowfullscreen>
+</iframe>
+
+<script>
+/* ===== PARTICLES (AGENCY STYLE) ===== */
+const canvas = document.getElementById("particles");
+const ctx = canvas.getContext("2d");
+
+function resize() {
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+}
+resize();
+addEventListener("resize", resize);
+
+const colors = ["#6E78F7", "#8285C6", "#44498A"];
+const particles = Array.from({ length: 140 }, () => ({
+  x: Math.random() * canvas.width,
+  y: Math.random() * canvas.height,
+  r: Math.random() * 2.5 + 1,
+  dx: (Math.random() - .5) * .35,
+  dy: (Math.random() - .5) * .35,
+  c: colors[Math.floor(Math.random() * colors.length)],
+  a: Math.random() * .6 + .3
+}));
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for (const p of particles) {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = p.c;
+    ctx.globalAlpha = p.a;
+    ctx.shadowBlur = 18;
+    ctx.shadowColor = p.c;
+    ctx.fill();
+
+    p.x += p.dx;
+    p.y += p.dy;
+    if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+    if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+  }
+  ctx.globalAlpha = 1;
+  requestAnimationFrame(animate);
+}
+animate();
+
+/* ===== 5 SECOND LOADER ===== */
+setTimeout(() => {
+  const loader = document.getElementById("loader");
+  loader.style.opacity = "0";
+
+  setTimeout(() => loader.remove(), 1000);
+  document.querySelector("iframe").style.display = "block";
+}, 5000);
+</script>
+
+</body>
+</html>
